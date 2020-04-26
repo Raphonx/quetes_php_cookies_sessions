@@ -1,3 +1,20 @@
+<?php session_start() ?>
+<?php if (isset($_POST['loginname'])) {
+    $_SESSION['username'] = $_POST['loginname'];
+} ?>
+<?php
+if (isset($_SESSION['username']) && isset($_GET["add_to_cart"])){
+    $i=$_GET["add_to_cart"];
+    $_SESSION["cart"][$i] = $i;
+}
+?>
+<?php
+if (isset($_GET['kill'])) {
+    $_SESSION = array();
+    session_destroy();
+    unset($_SESSION);
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -43,11 +60,30 @@
                             Cart
                         </a>
                     </li>
+                    <li>
+                        <?php
+                        if(!isset($_SESSION['username'])):
+                            ?>
+                            <a href="/login.php" class="btn btn-success navbar-btn">
+                                <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                                Log in
+                            </a>
+                        <?php
+                        else:
+                            ?>
+                            <a href="/index.php?kill=1" class="btn btn-danger navbar-btn">
+                                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                                Log out
+                            </a>
+                        <?php
+                        endif;
+                        ?>
+                    </li>
                 </ul>
             </div><!-- /.navbar-collapse -->
         </div><!-- /.container-fluid -->
     </nav>
     <div class="container-fluid text-right">
-        <strong>Hello Wilder !</strong>
+        <strong>Hello <?=!empty($_SESSION['username']) ? $_SESSION['username'] : "Wilder" ;?> !</strong>
     </div>
 </header>
